@@ -60,7 +60,8 @@ ga_domain:
 
 # Sidebar settings
 sidebar-about-description: 生活就是体验不同的生活
-sidebar-avatar:     # use absolute URL
+sidebar: true
+sidebar-avatar: //orzpiqtvd.bkt.clouddn.com/20170623155632_4W2wfK_WechatIMG3.jpeg  # use absolute URL
 
 
 # Featured Tags

@@ -3,18 +3,18 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Haojen # your blog title name
+title: refraincc # your blog title name
 subtitle:  
-author: Haojen Ma # 作者
+author: refraincc # 作者
 language: 
 timezone: 
 
 # custom Site settings
 # more detail check out docs
-SEOTitle: Haojen's blog 
-header-img: //o7bkkhiex.bkt.clouddn.com/lion-blur-bg.jpg
-email: HaojenMa@gmail.com
-description: "马浩珍在 Github 上的个人博客"
+SEOTitle: refraincc blog 
+header-img: "http://orzpiqtvd.bkt.clouddn.com/20170623155632_4W2wfK_WechatIMG3.jpeg"
+email: refrainc21@163.com
+description: "refraincc的个人博客"
 keyword: # seo key words
 
 favicon: # your favicon png
@@ -22,17 +22,17 @@ favicon: # your favicon png
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://haojen.github.io
+url: https://refraincc.github.io
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 
 # SNS settings
 # RSS:
-weibo_username: haojen
-zhihu_username: megahertz
-github_username: haojen
-twitter_username: ehazon
+weibo_username: refraincc
+zhihu_username: refrain
+github_username: refrainc21
+# twitter_username: ehazon
 facebook_username:  
 linkedin_username:  
 
@@ -59,7 +59,7 @@ ga_track_id:             # Format: UA-xxxxxx-xx
 ga_domain:
 
 # Sidebar settings
-sidebar-about-description: # 个人描述
+sidebar-about-description: 生活就是体验不同的生活
 sidebar-avatar:     # use absolute URL
 
 
@@ -131,22 +131,23 @@ theme: Anisina
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type: 
-  repo: 
-  branch: 
+  type: git
+  repo: https://github.com/refraincc/refraincc.github.io.git
+  branch: master
+
 
 
 # img CDN path
-cdn-url:  # 你的CDN地址
+cdn-url:  http://orzpiqtvd.bkt.clouddn.com
 
 # Qiniu imageView2 API
 # More info http://developer.qiniu.com/code/v6/api/kodo-api/image/imageview2.html
 clip-content: "?imageView2/1/w/1400/h/400/interlace/1/q/90"
-clip-avatar: "?imageView2/2/w/300/h/300/interlace/1/q/90"
-clip-home-post-bg: "?imageView2/1/w/800/h/300/interlace/1/q/70"
+clip-avatar: "http://orzpiqtvd.bkt.clouddn.com/20170623155632_4W2wfK_WechatIMG3.jpeg"
+clip-home-post-bg: "http://orzpiqtvd.bkt.clouddn.com/20170623155632_4W2wfK_WechatIMG3.jpeg"
 
 # post default images
-post-default-img: #博文默认的图片
+post-default-img: "http://orzpiqtvd.bkt.clouddn.com/20170623155632_4W2wfK_WechatIMG3.jpeg"
 post-default-img-mobile: #移动端显示的图片
 
 # search api , set your custom key

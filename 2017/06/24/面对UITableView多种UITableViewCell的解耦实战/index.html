@@ -168,192 +168,21 @@
                 <h1 id="面对UITableView多种UITableViewCell的解耦实战"><a href="#面对UITableView多种UITableViewCell的解耦实战" class="headerlink" title="面对UITableView多种UITableViewCell的解耦实战"></a>面对UITableView多种UITableViewCell的解耦实战</h1><p>最近项目中有一个界面需要展示多种Cell,而且在业务需求上也会有多种变化，Cell的种类有可能非常的多，UI差异也比较大,数据结构也不一样，这种结构有可能有5种，也有可能有10种往上。</p>
 <p>如果按照以往的方法，为每种Cell写注册，高度，创建的代码，是一种非常吃力不讨好的办法，最终导致Controller中的代码会越来越臃肿，越来越难以维护！</p>
 <p>那么我们应该如何解决这种问题呢？如何通过对原来的代码最少的改动的基础上进行UI的调整，添加？</p>
-<h2 id="前期的准备工作"><a href="#前期的准备工作" class="headerlink" title="前期的准备工作"></a>前期的准备工作</h2><p>首先在最初的与后端接口设计的时候，我们选择了一种十分通用的Json格式:<br><figure class="highlight plain"><table><tr><td class="code"><pre><div class="line">Array [</div><div class="line">			Dictionary&#123;</div><div class="line">				uitype : @&quot;1001&quot;</div><div class="line">				dict : &#123;</div><div class="line">							title : @&quot;&quot;,</div><div class="line">							name : @&quot;&quot;</div><div class="line">						&#125;</div><div class="line">			&#125;</div><div class="line">			Dictionary&#123;</div><div class="line">				uitype : @&quot;1002&quot;</div><div class="line">				dict : &#123;</div><div class="line">							list : [1, 2, 3]</div><div class="line">						&#125;</div><div class="line">			&#125;</div><div class="line">			Dictionary&#123;</div><div class="line">				uitype : @&quot;1003&quot;</div><div class="line">				dict : &#123;</div><div class="line">							content : @&quot;&quot;</div><div class="line">						&#125;</div><div class="line">				</div><div class="line">			&#125;</div><div class="line">		]</div></pre></td></tr></table></figure></p>
+<h2 id="前期的准备工作"><a href="#前期的准备工作" class="headerlink" title="前期的准备工作"></a>前期的准备工作</h2><p>首先在最初的与后端接口设计的时候，我们选择了一种十分通用的Json格式:<br><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">Array [</div><div class="line">			Dictionary&#123;</div><div class="line">				uitype : @<span class="string">"1001"</span></div><div class="line">				dict : &#123;</div><div class="line">							title : @<span class="string">""</span>,</div><div class="line">							name : @<span class="string">""</span></div><div class="line">						&#125;</div><div class="line">			&#125;</div><div class="line">			Dictionary&#123;</div><div class="line">				uitype : @<span class="string">"1002"</span></div><div class="line">				dict : &#123;</div><div class="line">							list : [1, 2, 3]</div><div class="line">						&#125;</div><div class="line">			&#125;</div><div class="line">			Dictionary&#123;</div><div class="line">				uitype : @<span class="string">"1003"</span></div><div class="line">				dict : &#123;</div><div class="line">							content : @<span class="string">""</span></div><div class="line">						&#125;</div><div class="line">				</div><div class="line">			&#125;</div><div class="line">		]</div></pre></td></tr></table></figure></p>
 <p>以上的<code>Json格式</code>中我们可以看出在，数组里的字典只有两个字段，一个是<code>uitpye</code>,一个是<code>dict</code>,其中<code>uitype</code>是为了决定Cell的类型，和之后为了将<code>dict</code>转换成与<code>uitype</code>想对应的<code>Model</code>源数据。</p>
 <p>这样的<code>Json格式</code>可以方便我们在将不同的源数据转换成TableView想要的Cell和Cell展示数据需要的Model</p>
 <p>好了前期的准备工作好了，那么接下来就让我们开始下面的工作吧~</p>
-<h2 id="基本Model数据"><a href="#基本Model数据" class="headerlink" title="基本Model数据"></a>基本Model数据</h2><p>面对<code>TableView</code>的<code>dataSource</code>和<code>delegate</code>最重要的两个代理方法</p>
-<pre><code>- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    return cellHeight;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier];
-    return cell;
-}
-</code></pre><p>我们要考虑如何用最简洁的代码告诉<code>TableView</code> ，<code>Cell的高度</code>、<code>Cell的类型</code>；</p>
-<p>为了最简单直接的实现这两个代码方法，我们需要为<code>TableView</code>创建一个<code>ModelManager</code>；</p>
-<pre><code>typedef NS_ENUM(NSInteger, ModelType) {
-    ModelTypeApple      = 1001,
-    ModelTypeBanana     = 1002,
-    ModelTypeOrange     = 1003
-};
-
-@protocol ModelDelegate &lt;NSObject&gt;
-
-/**
- 通过dataModel拿到CellHeight
- */
-- (CGFloat) cellModelHeight;
-
-
-@end
-
-@protocol CellDelegate &lt;NSObject&gt;
-
-/**
- cell通过此方法进行刷新数据
- */
-- (void) refreshDataModel:(id&lt;ModelDelegate&gt;)dataModel;
-
-@end
-
-
-@interface ModelManager : NSObject
-
-/*后端返回的源数据*/
-@property (nonatomic, assign)ModelType uitype;
-
-@property (nonatomic, copy)NSDictionary *dict;
-
-
-/*辅助属性*/
-@property (nonatomic, copy)NSString *dataModelClassName; //uitype对应的dataModel
-
-@property (nonatomic, copy)NSString *cellClassName; //uitype对应的Cell
-
-@property (nonatomic, assign)CGFloat cellHeight; //dataModel通过ModelManagerDelegate返回的cell高度
-
-@property (nonatomic,strong)id&lt;ModelDelegate&gt; dataModel; //通过uitype将dict转换的model实例
-
-
-@end
-</code></pre><p>这样我们就创建了一个通用的Model,也是拿到后端数据后创建的一个最原始的Model,通过这个Model我们可以创建出<code>TableView</code>需要的Cell类型、CellHeight、Model。</p>
-<p>通过这个基础的ModelManager，我们可以很简洁的实现<code>TableView</code>的代理方法.</p>
-<pre><code>- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
-    return self.dataSource.count;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-
-    ModelManager *modelMgr = self.dataSource[indexPath.row];
-
-    id&lt;CellDelegate&gt; cell = [tableView dequeueReusableCellWithIdentifier:modelMgr.cellClassName forIndexPath:indexPath];
-
-    if (!cell) {
-
-        Class cellClass = NSClassFromString(modelMgr.cellClassName);
-
-        [tableView registerClass:cellClass forCellReuseIdentifier:modelMgr.cellClassName];
-    }
-
-    if ([cell respondsToSelector:@selector(refreshDataModel:)]) {
-        [cell refreshDataModel:modelMgr.dataModel];
-    }
-    return (UITableViewCell *)cell;
-}
-
-- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
-    ModelManager *modelMgr = self.dataSource[indexPath.row];
-
-    return modelMgr.cellHeight;
-}
-</code></pre><p>可以看到在控制器的<code>TableView</code>代理方法中，我们并不需要写太多的代码，并且在之后的项目维护中，我们也不用再去动这部分代码。</p>
-<h2 id="创建dataModel"><a href="#创建dataModel" class="headerlink" title="创建dataModel"></a>创建dataModel</h2><p>为了给调取模型数据的计算做缓存处理，所以以下的创建都是通过<code>lazy</code>的方式</p>
-<pre><code>@implementation ModelManager
-
-
-- (NSString *)cellClassName{
-
-    if (!_cellClassName) {
-
-        NSString *cellClassName = @&quot;&quot;;
-
-        switch (self.uitype) {
-            case ModelTypeApple:
-                cellClassName = @&quot;AppleTableViewCell&quot;;
-                break;
-
-            case ModelTypeBanana:
-                cellClassName = @&quot;BananaTableViewCell&quot;;
-                break;
-
-            case ModelTypeOrange:
-                cellClassName = @&quot;OrangeTableViewCell&quot;;
-                break;
-
-            default:
-                break;
-        }
-
-        _cellClassName = cellClassName;
-    }
-
-    return _cellClassName;
-}
-
-
-- (NSString *)dataModelClassName{
-    if (!_dataModelClassName) {
-
-        NSString *dataModelClassName = @&quot;&quot;;
-
-        switch (self.uitype) {
-            case ModelTypeApple:
-                dataModelClassName = @&quot;AppleTableViewCell&quot;;
-                break;
-
-            case ModelTypeBanana:
-                dataModelClassName = @&quot;BananaTableViewCell&quot;;
-                break;
-
-            case ModelTypeOrange:
-                dataModelClassName = @&quot;OrangeTableViewCell&quot;;
-                break;
-
-            default:
-                break;
-        }
-
-        _dataModelClassName = dataModelClassName;
-    }
-
-    return _dataModelClassName;
-}
-
-- (id&lt;ModelDelegate&gt;)dataModel{
-    if (!_dataModel) {
-
-        Class dataModelClass = NSClassFromString(self.dataModelClassName);
-        id&lt;ModelDelegate&gt; dataModel = [[dataModelClass alloc]init];
-        //id&lt;ModelDelegate&gt; dataModel = [dataModelClass objectWithKeyValues:self.dict];
-        _dataModel = dataModel;
-    }
-    return _dataModel;
-}
-
-
-- (CGFloat)cellHeight{
-    if (!_cellHeight) {
-        if ([self.dataModel respondsToSelector:@selector(cellModelHeight)]) {
-            _cellHeight = [self.dataModel cellModelHeight];
-        }
-    }
-    return _cellHeight;
-}
-
-@end
-</code></pre><p>这样在<code>tableView</code>执行<code>heightForRowAtIndexPath</code>方法的时候，<code>dataModel</code>就可以在<code>ModelManager</code>中通过<code>uitype</code>创建出来。而我们只用在<code>id&lt;ModelManager&gt;</code>的<code>dataModel</code>中返回<code>CellHeight</code>。</p>
+<h2 id="基本Model数据"><a href="#基本Model数据" class="headerlink" title="基本Model数据"></a>基本Model数据</h2><p>面对<code>TableView</code>的<code>dataSource</code>和<code>delegate</code>最重要的两个代理方法<br><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath&#123;</div><div class="line">   	<span class="built_in">return</span> cellHeight;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath</div><div class="line">&#123;</div><div class="line">    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:kCellIdentifier];</div><div class="line">    <span class="built_in">return</span> cell;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>我们要考虑如何用最简洁的代码告诉<code>TableView</code> ，<code>Cell的高度</code>、<code>Cell的类型</code>；</p>
+<p>为了最简单直接的实现这两个代码方法，我们需要为<code>TableView</code>创建一个<code>ModelManager</code>；<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">typedef NS_ENUM(NSInteger, ModelType) &#123;</div><div class="line">    ModelTypeApple      = 1001,</div><div class="line">    ModelTypeBanana     = 1002,</div><div class="line">    ModelTypeOrange     = 1003</div><div class="line">&#125;;</div><div class="line"></div><div class="line">@protocol ModelDelegate &lt;NSObject&gt;</div><div class="line"></div><div class="line">/**</div><div class="line"> 通过dataModel拿到CellHeight</div><div class="line"> */</div><div class="line">- (CGFloat) cellModelHeight;</div><div class="line"></div><div class="line"></div><div class="line">@end</div><div class="line"></div><div class="line">@protocol CellDelegate &lt;NSObject&gt;</div><div class="line"></div><div class="line">/**</div><div class="line"> cell通过此方法进行刷新数据</div><div class="line"> */</div><div class="line">- (void) refreshDataModel:(id&lt;ModelDelegate&gt;)dataModel;</div><div class="line"></div><div class="line">@end</div><div class="line"></div><div class="line"></div><div class="line">@interface ModelManager : NSObject</div><div class="line"></div><div class="line">/*后端返回的源数据*/</div><div class="line">@property (nonatomic, assign)ModelType uitype;</div><div class="line"></div><div class="line">@property (nonatomic, copy)NSDictionary *dict;</div><div class="line"></div><div class="line"></div><div class="line">/*辅助属性*/</div><div class="line">@property (nonatomic, copy)NSString *dataModelClassName; //uitype对应的dataModel</div><div class="line"></div><div class="line">@property (nonatomic, copy)NSString *cellClassName; //uitype对应的Cell</div><div class="line"></div><div class="line">@property (nonatomic, assign)CGFloat cellHeight; //dataModel通过ModelManagerDelegate返回的cell高度</div><div class="line"></div><div class="line">@property (nonatomic,strong)id&lt;ModelDelegate&gt; dataModel; //通过uitype将dict转换的model实例</div><div class="line"></div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure></p>
+<p>这样我们就创建了一个通用的Model,也是拿到后端数据后创建的一个最原始的Model,通过这个Model我们可以创建出<code>TableView</code>需要的Cell类型、CellHeight、Model。</p>
+<p>通过这个基础的ModelManager，我们可以很简洁的实现<code>TableView</code>的代理方法.<br><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line"></div><div class="line">- (NSInteger) tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section&#123;</div><div class="line">    <span class="built_in">return</span> self.dataSource.count;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath&#123;</div><div class="line"></div><div class="line">    ModelManager *modelMgr = self.dataSource[indexPath.row];</div><div class="line">    </div><div class="line">    id&lt;CellDelegate&gt; cell = [tableView dequeueReusableCellWithIdentifier:modelMgr.cellClassName forIndexPath:indexPath];</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (!cell) &#123;</div><div class="line">        </div><div class="line">        Class cellClass = NSClassFromString(modelMgr.cellClassName);</div><div class="line">        </div><div class="line">        [tableView registerClass:cellClass forCellReuseIdentifier:modelMgr.cellClassName];</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> ([cell respondsToSelector:@selector(refreshDataModel:)]) &#123;</div><div class="line">        [cell refreshDataModel:modelMgr.dataModel];</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">return</span> (UITableViewCell *)cell;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath&#123;</div><div class="line">    ModelManager *modelMgr = self.dataSource[indexPath.row];</div><div class="line">    </div><div class="line">    <span class="built_in">return</span> modelMgr.cellHeight;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以看到在控制器的<code>TableView</code>代理方法中，我们并不需要写太多的代码，并且在之后的项目维护中，我们也不用再去动这部分代码。</p>
+<h2 id="创建dataModel"><a href="#创建dataModel" class="headerlink" title="创建dataModel"></a>创建dataModel</h2><p>为了给调取模型数据的计算做缓存处理，所以以下的创建都是通过<code>lazy</code>的方式<br>    <figure class="highlight bash"><table><tr><td class="code"><pre><div class="line">@implementation ModelManager</div><div class="line"></div><div class="line"></div><div class="line">- (NSString *)cellClassName&#123;</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (!_cellClassName) &#123;</div><div class="line">        </div><div class="line">        NSString *cellClassName = @<span class="string">""</span>;</div><div class="line">        </div><div class="line">        switch (self.uitype) &#123;</div><div class="line">            <span class="keyword">case</span> ModelTypeApple:</div><div class="line">                cellClassName = @<span class="string">"AppleTableViewCell"</span>;</div><div class="line">                <span class="built_in">break</span>;</div><div class="line">                </div><div class="line">            <span class="keyword">case</span> ModelTypeBanana:</div><div class="line">                cellClassName = @<span class="string">"BananaTableViewCell"</span>;</div><div class="line">                <span class="built_in">break</span>;</div><div class="line">                </div><div class="line">            <span class="keyword">case</span> ModelTypeOrange:</div><div class="line">                cellClassName = @<span class="string">"OrangeTableViewCell"</span>;</div><div class="line">                <span class="built_in">break</span>;</div><div class="line">                </div><div class="line">            default:</div><div class="line">                <span class="built_in">break</span>;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        _cellClassName = cellClassName;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="built_in">return</span> _cellClassName;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">- (NSString *)dataModelClassName&#123;</div><div class="line">    <span class="keyword">if</span> (!_dataModelClassName) &#123;</div><div class="line">        </div><div class="line">        NSString *dataModelClassName = @<span class="string">""</span>;</div><div class="line">        </div><div class="line">        switch (self.uitype) &#123;</div><div class="line">            <span class="keyword">case</span> ModelTypeApple:</div><div class="line">                dataModelClassName = @<span class="string">"AppleTableViewCell"</span>;</div><div class="line">                <span class="built_in">break</span>;</div><div class="line">                </div><div class="line">            <span class="keyword">case</span> ModelTypeBanana:</div><div class="line">                dataModelClassName = @<span class="string">"BananaTableViewCell"</span>;</div><div class="line">                <span class="built_in">break</span>;</div><div class="line">                </div><div class="line">            <span class="keyword">case</span> ModelTypeOrange:</div><div class="line">                dataModelClassName = @<span class="string">"OrangeTableViewCell"</span>;</div><div class="line">                <span class="built_in">break</span>;</div><div class="line">                </div><div class="line">            default:</div><div class="line">                <span class="built_in">break</span>;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        _dataModelClassName = dataModelClassName;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="built_in">return</span> _dataModelClassName;</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (id&lt;ModelDelegate&gt;)dataModel&#123;</div><div class="line">    <span class="keyword">if</span> (!_dataModel) &#123;</div><div class="line">        </div><div class="line">        Class dataModelClass = NSClassFromString(self.dataModelClassName);</div><div class="line">        id&lt;ModelDelegate&gt; dataModel = [[dataModelClass alloc]init];</div><div class="line">        //id&lt;ModelDelegate&gt; dataModel = [dataModelClass objectWithKeyValues:self.dict];</div><div class="line">        _dataModel = dataModel;</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">return</span> _dataModel;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">- (CGFloat)cellHeight&#123;</div><div class="line">    <span class="keyword">if</span> (!_cellHeight) &#123;</div><div class="line">        <span class="keyword">if</span> ([self.dataModel respondsToSelector:@selector(cellModelHeight)]) &#123;</div><div class="line">            _cellHeight = [self.dataModel cellModelHeight];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">return</span> _cellHeight;</div><div class="line">&#125;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure></p>
+<p>这样在<code>tableView</code>执行<code>heightForRowAtIndexPath</code>方法的时候，<code>dataModel</code>就可以在<code>ModelManager</code>中通过<code>uitype</code>创建出来。而我们只用在<code>id&lt;ModelManager&gt;</code>的<code>dataModel</code>中返回<code>CellHeight</code>。</p>
 <p>这下<code>Model</code>层基本已经的核心代码就这样了。接下来的就是<code>TableViewCell</code>的核心代码了</p>
-<h2 id="TableViewCell的数据获取"><a href="#TableViewCell的数据获取" class="headerlink" title="TableViewCell的数据获取"></a>TableViewCell的数据获取</h2><pre><code>#import &quot;ModelManager.h&quot;
-
-@interface AppleTableViewCell : UITableViewCell &lt;CellDelegate&gt;
-
-- (void)refreshDataModel:(id&lt;ModelDelegate&gt;)dataModel;
-
-@end
-</code></pre><p>在创建任意的<code>UITableViewCell</code>中，我们只要遵守<code>CellDelegate</code>并实现<code>- (void)refreshDataModel:(id&lt;ModelDelegate&gt;)dataModel;</code>方法就可以获取数据源。</p>
+<h2 id="TableViewCell的数据获取"><a href="#TableViewCell的数据获取" class="headerlink" title="TableViewCell的数据获取"></a>TableViewCell的数据获取</h2><figure class="highlight bash"><table><tr><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">#import "ModelManager.h"</span></div><div class="line"></div><div class="line">@interface AppleTableViewCell : UITableViewCell &lt;CellDelegate&gt;</div><div class="line"></div><div class="line">- (void)refreshDataModel:(id&lt;ModelDelegate&gt;)dataModel;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>在创建任意的<code>UITableViewCell</code>中，我们只要遵守<code>CellDelegate</code>并实现<code>- (void)refreshDataModel:(id&lt;ModelDelegate&gt;)dataModel;</code>方法就可以获取数据源。</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在这套设计方案中，<code>Controller</code>中的代码基本是不用再改动的。我们只需要在<code>ModelManager</code>中通过<code>dataModelClassName</code>和<code>cellClassName</code>来添加源数据类型就可以了，可以解决由于多种<code>TableViewCell</code>类型展示的问题。</p>
 
                 <hr>

@@ -87,17 +87,17 @@
 
 
 
-<meta name="description" content="#Mac下的SVN分支管理因为以前对项目的管理是用的git对代码进行版本控制,但现公司一直在用SVN，最近新项目提包上线，想换一种版本控制的方式，于是就想着用SVN的分支做一做 #1.创建目录1.1    在SVN的根目录下创建如下文件夹目录123branchs 		//此目录主要是放一下分支tag				//此目录可以放一些大的版本trunk			//项目主分支 1.2    将这三个文件夹提交">
+<meta name="description" content="链式编程本文介绍一下OC链式编程的基础使用，废话不多说，直接看代码 ##示例类 1234567891011121314151617@interface Person : NSObject@property (nonatomic, copy)NSString *name;@property (nonatomic, assign)NSInteger age;- (Person *(^)(NSStrin">
 <meta name="keywords" content="Coder">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mac下的SVN分支管理">
-<meta property="og:url" content="http://yoursite.com/child/2017/01/02/Mac下的SVN分支管理/index.html">
+<meta property="og:title" content="链式编程">
+<meta property="og:url" content="http://yoursite.com/child/2016/05/20/链式编程/index.html">
 <meta property="og:site_name" content="refraincc">
-<meta property="og:description" content="#Mac下的SVN分支管理因为以前对项目的管理是用的git对代码进行版本控制,但现公司一直在用SVN，最近新项目提包上线，想换一种版本控制的方式，于是就想着用SVN的分支做一做 #1.创建目录1.1    在SVN的根目录下创建如下文件夹目录123branchs 		//此目录主要是放一下分支tag				//此目录可以放一些大的版本trunk			//项目主分支 1.2    将这三个文件夹提交">
-<meta property="og:updated_time" content="2017-12-21T14:39:46.868Z">
+<meta property="og:description" content="链式编程本文介绍一下OC链式编程的基础使用，废话不多说，直接看代码 ##示例类 1234567891011121314151617@interface Person : NSObject@property (nonatomic, copy)NSString *name;@property (nonatomic, assign)NSInteger age;- (Person *(^)(NSStrin">
+<meta property="og:updated_time" content="2017-12-21T14:57:38.160Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Mac下的SVN分支管理">
-<meta name="twitter:description" content="#Mac下的SVN分支管理因为以前对项目的管理是用的git对代码进行版本控制,但现公司一直在用SVN，最近新项目提包上线，想换一种版本控制的方式，于是就想着用SVN的分支做一做 #1.创建目录1.1    在SVN的根目录下创建如下文件夹目录123branchs 		//此目录主要是放一下分支tag				//此目录可以放一些大的版本trunk			//项目主分支 1.2    将这三个文件夹提交">
+<meta name="twitter:title" content="链式编程">
+<meta name="twitter:description" content="链式编程本文介绍一下OC链式编程的基础使用，废话不多说，直接看代码 ##示例类 1234567891011121314151617@interface Person : NSObject@property (nonatomic, copy)NSString *name;@property (nonatomic, assign)NSInteger age;- (Person *(^)(NSStrin">
 
 
 
@@ -125,13 +125,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/child/2017/01/02/Mac下的SVN分支管理/"/>
+  <link rel="canonical" href="http://yoursite.com/child/2016/05/20/链式编程/"/>
 
 
 
 
 
-  <title> Mac下的SVN分支管理 | refraincc </title>
+  <title> 链式编程 | refraincc </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
@@ -250,7 +250,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/child/2017/01/02/Mac下的SVN分支管理/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/child/2016/05/20/链式编程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="refraincc">
@@ -271,7 +271,7 @@
             
             
               
-                Mac下的SVN分支管理
+                链式编程
               
             
           </h1>
@@ -286,8 +286,8 @@
               
                 <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-02T11:39:55+08:00">
-                2017-01-02
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-20T00:00:00+08:00">
+                2016-05-20
               </time>
             
 
@@ -322,13 +322,12 @@
       
 
       
-        <p>#Mac下的SVN分支管理<br>因为以前对项目的管理是用的git对代码进行版本控制,但现公司一直在用SVN，最近新项目提包上线，想换一种版本控制的方式，于是就想着用SVN的分支做一做</p>
-<p>#1.创建目录<br>1.1    在SVN的根目录下创建如下文件夹目录<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">branchs 		//此目录主要是放一下分支</div><div class="line">tag				//此目录可以放一些大的版本</div><div class="line">trunk			//项目主分支</div></pre></td></tr></table></figure></p>
-<p>1.2    将这三个文件夹提交至远程仓库</p>
-<p>#2.为<code>trunk</code>创建分支<br>在终端中输入<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">svn copy trunk/branchs/trunk_1.0</div></pre></td></tr></table></figure></p>
-<p>然后再提交至远程仓库<br>这样<code>trunk_1.0</code>的分支就创建好了</p>
-<p>#3.在主分支与1.0分支中有差异的情况下合并文件<br>1.在<code>trunk_1.0</code>目录下创建一个<code>test.txt</code>文件，并提交至远程仓库<br>2.切换到trunk目录下，执行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">svn merge ../branches/trunk_1.0/</div></pre></td></tr></table></figure></p>
-<p>3.这样就能看见在<code>trunk</code>目录下的<code>test.txt</code>文件了</p>
+        <h1 id="链式编程"><a href="#链式编程" class="headerlink" title="链式编程"></a>链式编程</h1><p>本文介绍一下OC链式编程的基础使用，废话不多说，直接看代码</p>
+<p>##示例类</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@interface Person : NSObject</div><div class="line"></div><div class="line"></div><div class="line">@property (nonatomic, copy)NSString *name;</div><div class="line"></div><div class="line">@property (nonatomic, assign)NSInteger age;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">- (Person *(^)(NSString *))xy_name;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">- (Person *(^)(NSInteger))xy_age;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">@implementation Person</div><div class="line"></div><div class="line"></div><div class="line">- (Person *(^)(NSInteger))xy_age&#123;</div><div class="line">    </div><div class="line">    <span class="built_in">return</span> ^(NSInteger xy_age)&#123;</div><div class="line">        </div><div class="line">        self.age = xy_age;</div><div class="line">        </div><div class="line">        <span class="built_in">return</span> self;</div><div class="line">        </div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">- (Person *(^)(NSString *))xy_name&#123;</div><div class="line">    </div><div class="line">    <span class="built_in">return</span> ^(NSString * xy_name)&#123;</div><div class="line">        </div><div class="line">        self.name = xy_name;</div><div class="line">        </div><div class="line">        <span class="built_in">return</span> self;</div><div class="line">        </div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>##简单使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Person *person = [[Person alloc]init];</div><div class="line">    </div><div class="line">person.xy_age(10).xy_name(@<span class="string">"张三"</span>);</div><div class="line">    </div><div class="line">NSLog(@<span class="string">"name = %@, age = %ld"</span>, person.name, person.age);</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -371,18 +370,14 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/05/20/链式编程/" rel="next" title="链式编程">
-                <i class="fa fa-chevron-left"></i> 链式编程
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/03/15/DTCoreText的简单使用/" rel="prev" title="DTCoreText的简单使用">
-                DTCoreText的简单使用 <i class="fa fa-chevron-right"></i>
+              <a href="/2017/01/02/Mac下的SVN分支管理/" rel="prev" title="Mac下的SVN分支管理">
+                Mac下的SVN分支管理 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -430,8 +425,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Inhaltsverzeichnis
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Übersicht
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="http://orzpiqtvd.bkt.clouddn.com/20170625112958_TombF7_header_image_Fotor.jpeg"
@@ -484,6 +488,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#链式编程"><span class="nav-number">1.</span> <span class="nav-text">链式编程</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

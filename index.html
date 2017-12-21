@@ -197,7 +197,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
-            Home
+            Startseite
           </a>
         </li>
       
@@ -207,7 +207,7 @@
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
-            Archives
+            Archiv
           </a>
         </li>
       
@@ -240,6 +240,255 @@
           <div id="content" class="content">
             
   <section id="posts" class="posts-expand">
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/child/2017/12/21/TCP网络中遇到的小坑总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="refraincc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://orzpiqtvd.bkt.clouddn.com/20170625112958_TombF7_header_image_Fotor.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="refraincc">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/12/21/TCP网络中遇到的小坑总结/" itemprop="url">
+                  TCP网络
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-21T22:39:46+08:00">
+                2017-12-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#TCP网络中遇到的小坑总结<br>最近公司项目需要搭建一个TCP网络，因为iOS系统中是采用小端序，而后端是采用的大端序所以在截取Dada文件的时候，截取大小对应不上，查阅各方资料终于截取成功，代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">- (void)socket:(GCDAsyncSocket *)sock didReadData:(NSData *)data withTag:(long)tag&#123;</div><div class="line">    </div><div class="line">    NSInteger le;</div><div class="line">    </div><div class="line">    [data getBytes:&amp;le length:2];</div><div class="line">        </div><div class="line">    uint16_t len = ntohs(le);</div><div class="line"></div><div class="line">    NSData *subData = [data subdataWithRange:NSMakeRange(2, len)];</div><div class="line">    </div><div class="line">    NSString *s = [[NSString alloc]initWithData:subData encoding:NSUTF8StringEncoding];</div><div class="line">    </div><div class="line">    NSLog(@&quot;s = %@&quot;,s );</div><div class="line">    </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>核心代码是用<code>ntohs()</code>方法将截取的<code>headData</code>中的<code>cotentData</code>的<code>lenght</code>转换成小端序，这样就转换出了正确的contentData长度，从而正确解析contentData数据</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/child/2017/12/21/链式编程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="refraincc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://orzpiqtvd.bkt.clouddn.com/20170625112958_TombF7_header_image_Fotor.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="refraincc">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/12/21/链式编程/" itemprop="url">
+                  链式编程
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-21T22:39:46+08:00">
+                2017-12-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="链式编程"><a href="#链式编程" class="headerlink" title="链式编程"></a>链式编程</h1><p>本文介绍一下OC链式编程的基础使用，废话不多说，直接看代码</p>
+<p>##示例类</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">@interface Person : NSObject</div><div class="line"></div><div class="line"></div><div class="line">@property (nonatomic, copy)NSString *name;</div><div class="line"></div><div class="line">@property (nonatomic, assign)NSInteger age;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">- (Person *(^)(NSString *))xy_name;</div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line">- (Person *(^)(NSInteger))xy_age;</div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"></div><div class="line">@implementation Person</div><div class="line"></div><div class="line"></div><div class="line">- (Person *(^)(NSInteger))xy_age&#123;</div><div class="line">    </div><div class="line">    <span class="built_in">return</span> ^(NSInteger xy_age)&#123;</div><div class="line">        </div><div class="line">        self.age = xy_age;</div><div class="line">        </div><div class="line">        <span class="built_in">return</span> self;</div><div class="line">        </div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">- (Person *(^)(NSString *))xy_name&#123;</div><div class="line">    </div><div class="line">    <span class="built_in">return</span> ^(NSString * xy_name)&#123;</div><div class="line">        </div><div class="line">        self.name = xy_name;</div><div class="line">        </div><div class="line">        <span class="built_in">return</span> self;</div><div class="line">        </div><div class="line">    &#125;;</div><div class="line">    </div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">@end</div></pre></td></tr></table></figure>
+<p>##简单使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">Person *person = [[Person alloc]init];</div><div class="line">    </div><div class="line">person.xy_age(10).xy_name(@<span class="string">"张三"</span>);</div><div class="line">    </div><div class="line">NSLog(@<span class="string">"name = %@, age = %ld"</span>, person.name, person.age);</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
     
       
 
@@ -287,7 +536,7 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
               <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-24T20:09:56+08:00">
                 2017-06-24
@@ -389,7 +638,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/child/2017/06/23/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/child/2017/03/15/DTCoreText的简单使用/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="refraincc">
@@ -411,8 +660,8 @@
             
               
                 
-                <a class="post-title-link" href="/2017/06/23/hello-world/" itemprop="url">
-                  Hello World
+                <a class="post-title-link" href="/2017/03/15/DTCoreText的简单使用/" itemprop="url">
+                  DTCoreText的简单使用
                 </a>
               
             
@@ -426,10 +675,10 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               
-                <span class="post-meta-item-text">Posted on</span>
+                <span class="post-meta-item-text">Veröffentlicht am</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-23T20:40:00+08:00">
-                2017-06-23
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-15T21:09:13+08:00">
+                2017-03-15
               </time>
             
 
@@ -466,15 +715,135 @@
       
         
           
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+            <p>#DTCoreText</p>
+<p><a href="https://github.com/Cocoanetics/DTCoreText" target="_blank" rel="external">DTCoreText</a> 是一个可以将一段<code>HTML</code>解析成<code>NSAttributedString</code>的第三方库。</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/child/2017/01/02/Mac下的SVN分支管理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="refraincc">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://orzpiqtvd.bkt.clouddn.com/20170625112958_TombF7_header_image_Fotor.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="refraincc">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/01/02/Mac下的SVN分支管理/" itemprop="url">
+                  Mac下的SVN分支管理
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-02T11:39:55+08:00">
+                2017-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>#Mac下的SVN分支管理<br>因为以前对项目的管理是用的git对代码进行版本控制,但现公司一直在用SVN，最近新项目提包上线，想换一种版本控制的方式，于是就想着用SVN的分支做一做</p>
+<p>#1.创建目录<br>1.1    在SVN的根目录下创建如下文件夹目录<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">branchs 		//此目录主要是放一下分支</div><div class="line">tag				//此目录可以放一些大的版本</div><div class="line">trunk			//项目主分支</div></pre></td></tr></table></figure></p>
+<p>1.2    将这三个文件夹提交至远程仓库</p>
+<p>#2.为<code>trunk</code>创建分支<br>在终端中输入<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">svn copy trunk/branchs/trunk_1.0</div></pre></td></tr></table></figure></p>
+<p>然后再提交至远程仓库<br>这样<code>trunk_1.0</code>的分支就创建好了</p>
+<p>#3.在主分支与1.0分支中有差异的情况下合并文件<br>1.在<code>trunk_1.0</code>目录下创建一个<code>test.txt</code>文件，并提交至远程仓库<br>2.切换到trunk目录下，执行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">svn merge ../branches/trunk_1.0/</div></pre></td></tr></table></figure></p>
+<p>3.这样就能看见在<code>trunk</code>目录下的<code>test.txt</code>文件了</p>
 
           
         
@@ -554,8 +923,8 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives">
-                <span class="site-state-item-count">2</span>
-                <span class="site-state-item-name">posts</span>
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">Artikel</span>
               </a>
             </div>
           
@@ -568,7 +937,7 @@
             <div class="site-state-item site-state-tags">
               
                 <span class="site-state-item-count">1</span>
-                <span class="site-state-item-name">tags</span>
+                <span class="site-state-item-name">Tags</span>
               
             </div>
           
@@ -618,7 +987,7 @@
 
 
 <div class="powered-by">
-  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+  Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a>
 </div>
 
 <div class="theme-info">
